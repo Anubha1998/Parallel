@@ -1,94 +1,106 @@
 package com.lambdatest;
 
-import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileBy;
-//import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
-
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import org.openqa.selenium.By;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 public class sel4 {
-    String username = "deepanshulambdatest";
-    String authkey = "f8xr8eV7hpJJixO6sbVmPazAH4C8VoAUhEANPjikayLTXNlJKs";
-    public static AppiumDriver driver = null;
-    public String gridURL = "@mobile-hub.lambdatest.com/wd/hub";
-    public String status = "passed";
-    @BeforeTest
-    public void setUp() throws Exception {
 
+    private RemoteWebDriver driver;
+    private String Status = "failed";
 
-        DesiredCapabilities capabilities = new DesiredCapabilities();
+    @BeforeMethod
+    public void setup(Method m, ITestContext ctx) throws MalformedURLException {
+        String username = System.getenv("LT_USERNAME") == null ? "Your LT Username" : System.getenv("LT_USERNAME");
+        String authkey = System.getenv("LT_ACCESS_KEY") == null ? "Your LT AccessKey" : System.getenv("LT_ACCESS_KEY");
+        ;
+        String hub = "@hub.lambdatest.com/wd/hub";
+
+       DesiredCapabilities capabilities = new DesiredCapabilities();
         HashMap<String, Object> ltOptions = new HashMap<String, Object>();
         ltOptions.put("w3c", true);
-        ltOptions.put("platformName", "ios");
-        ltOptions.put("deviceName", "iPhone 14");
-        ltOptions.put("platformVersion", "16");
-        ltOptions.put("isRealMobile", true);
-        ltOptions.put("app", "lt://APP1016045801684404228061622");
+        ltOptions.put("browserName", "Chrome");
+        ltOptions.put("platformName", "Windows 11");
+        ltOptions.put("browserVersion", "110");
         capabilities.setCapability("lt:options", ltOptions);
 
 
 
-        try
-        {
-            driver = new AppiumDriver(new URL("https://" + username + ":" + authkey + gridURL), capabilities);
-            Thread.sleep(5000);
-
-        }
-        catch (MalformedURLException e)
-        {
-            System.out.println("Invalid grid URL");
-        } catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-        }
-
+        driver = new RemoteWebDriver(new URL("https://" + username + ":" + authkey + hub), capabilities);
     }
 
     @Test
-    public void testSimple() throws Exception
-    {
-        try
-        {
-            driver.findElement(By.xpath("//XCUIElementTypeButton[@name=\"navigation_account\"]")).click();
-            Thread.sleep(5000);
+    public void basicTest() throws InterruptedException {
+        String spanText;
+        System.out.println("Loading Url");
+        Thread.sleep(100);
+        driver.get("https://lambdatest.github.io/sample-todo-app/");
 
-            driver.findElement(By.xpath("//XCUIElementTypeTextField[@name=\"et_email\"]")).sendKeys("01100000110");
-            Thread.sleep(5000);
+        System.out.println("Checking Box");
+        driver.findElement(By.name("li1")).click();
 
-            driver.findElement(By.xpath("//XCUIElementTypeSecureTextField[@name=\"et_password\"]\n")).sendKeys("Test@123");
-            Thread.sleep(5000);
+        System.out.println("Checking Another Box");
+        driver.findElement(By.name("li2")).click();
 
-            driver.findElement(By.xpath("\t\n" + "//XCUIElementTypeButton[@name=\"mb_continue\"]")).click();
-            Thread.sleep(20000);
+        System.out.println("Checking Box");
+        driver.findElement(By.name("li3")).click();
 
-            driver.findElement(By.xpath("//XCUIElementTypeButton[@name=\"navigation_account\"]")).click();
-            Thread.sleep(20000);
+        System.out.println("Checking Another Box");
+        driver.findElement(By.name("li4")).click();
 
-            status="passed";
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            status="failed";
-        }
+        driver.findElement(By.id("sampletodotext")).sendKeys(" List Item 6");
+        driver.findElement(By.id("addbutton")).click();
+
+        driver.findElement(By.id("sampletodotext")).sendKeys(" List Item 7");
+        driver.findElement(By.id("addbutton")).click();
+
+        driver.findElement(By.id("sampletodotext")).sendKeys(" List Item 8");
+        driver.findElement(By.id("addbutton")).click();
+
+        System.out.println("Checking Another Box");
+        driver.findElement(By.name("li1")).click();
+
+        System.out.println("Checking Another Box");
+        driver.findElement(By.name("li3")).click();
+
+        System.out.println("Checking Another Box");
+        driver.findElement(By.name("li7")).click();
+
+        System.out.println("Checking Another Box");
+        driver.findElement(By.name("li8")).click();
+
+        System.out.println("Entering Text");
+        driver.findElement(By.id("sampletodotext")).sendKeys("Get Taste of Lambda and Stick to It");
+
+        driver.findElement(By.id("addbutton")).click();
+
+        System.out.println("Checking Another Box");
+        driver.findElement(By.name("li9")).click();
+
+        // Let's also assert that the todo we added is present in the list.
+
+        spanText = driver.findElementByXPath("/html/body/div/div/div/ul/li[9]/span").getText();
+        Assert.assertEquals("Get Taste of Lambda and Stick to It", spanText);
+        Status = "passed";
+        Thread.sleep(800);
+
+        System.out.println("TestFinished");
+
     }
-    @AfterTest
-    public void tearDown(ITestResult result) throws Exception
-    {
-        if (driver != null)
-        {
-            driver.executeScript("lambda-status=" + status);
-            driver.quit();
-        }
+
+    @AfterMethod
+    public void tearDown() {
+        driver.executeScript("lambda-status=" + Status);
+        driver.quit();
     }
+
 }
