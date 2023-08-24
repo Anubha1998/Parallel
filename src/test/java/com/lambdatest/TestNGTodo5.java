@@ -20,7 +20,7 @@ public class TestNGTodo1 {
 
     @BeforeMethod
     @org.testng.annotations.Parameters(value = {"browser", "version", "platform"})
-    public void TestNGTod5(String device, String version, String platform) {
+    public void TestNGTod5(String browser, String version, String platform) {
         String username = System.getenv("LT_USERNAME") == null ? "Your LT Username" : System.getenv("LT_USERNAME");
         String authkey = System.getenv("LT_ACCESS_KEY") == null ? "Your LT AccessKey" : System.getenv("LT_ACCESS_KEY");
         
