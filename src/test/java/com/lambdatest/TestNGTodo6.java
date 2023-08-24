@@ -26,7 +26,7 @@ public class TestNGTodo1 {
         String hub = "@hub.lambdatest.com/wd/hub";
 
         DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setCapability("browserName", device);
+        caps.setCapability("browserName", browser);
         caps.setCapability("browserVersion",version);
         caps.setCapability("platform", platform);
         caps.setCapability("name", m.getName() + " - " + this.getClass().getName());
