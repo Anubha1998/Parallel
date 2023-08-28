@@ -13,14 +13,14 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class TestNGTodo1 {
+public class TestNGTodo6 {
 
     private RemoteWebDriver driver;
     private String Status = "failed";
 
     @BeforeMethod
    @org.testng.annotations.Parameters(value = {"browser", "version", "platform"})
-    public void TestNGTod1(String browser, String version, String platform) {
+    public void TestNGTod1(String browser, String version, String platform,Method method) throws MalformedURLException {
         String username = System.getenv("LT_USERNAME") == null ? "Your LT Username" : System.getenv("LT_USERNAME");
         String authkey = System.getenv("LT_ACCESS_KEY") == null ? "Your LT AccessKey" : System.getenv("LT_ACCESS_KEY");
         
@@ -30,7 +30,7 @@ public class TestNGTodo1 {
         caps.setCapability("browserName", browser);
         caps.setCapability("browserVersion",version);
         caps.setCapability("platform", platform);
-        caps.setCapability("name", m.getName() + " - " + this.getClass().getName());
+        caps.setCapability("name", method.getName() + " - " + this.getClass().getName());
         caps.setCapability("plugin", "git-testng");
 
         String[] Tags = new String[] { "Feature", "Falcon", "Severe" };
