@@ -1,14 +1,5 @@
 trigger:
-  branches:
-    exclude:
-      - '*'
-
-pr:
-  - '*'
-
-variables:
-  smartui_automation: undefined
-  app_automation: undefined
+- main
 
 jobs:
 - job: Build
