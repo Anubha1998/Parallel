@@ -5,7 +5,7 @@ steps:
       connection: Extent
 
     env:
-      LT_BUILD_NAME: Extent Report Parallel-6
+      LT_BUILD_NAME: TestNG With Java
 
   - script: |
       mvn test -D suite=parallel.xml
