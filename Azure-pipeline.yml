@@ -19,7 +19,8 @@ jobs:
 
   - script: |
       mvn test -D suite=parallel.xml
-    displayName: 'Run TestNG tests'
+      
+  displayName: 'Run TestNG tests'
 
   - task: Lambdatest.lambda-azure-pipeline-extention.showResults-task.LambdatestResults@1
     displayName: 'Lambdatest Results'
