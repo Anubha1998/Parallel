@@ -1,17 +1,36 @@
-steps:
+trigger:
+  branches:
+    exclude:
+      - '*'
+
+pr:
+  - '*'
+
+variables:
+  smartui_automation: undefined
+  app_automation: undefined
+
+jobs:
+- job: Build
+  displayName: 'Build job'
+  pool:
+    vmImage: 'ubuntu-latest'
+
+  steps:
+
   - task: Lambdatest.lambda-azure-pipeline-extention.configuration-task.configuration@1
-    displayName: LambdaTest configuration setup
+    displayName: 'LambdaTest configuration setup'
     inputs:
       connection: Extent
 
     env:
-      LT_BUILD_NAME: TestNG With Java
+      LT_BUILD_NAME: 'TestNG With Java'
 
   - script: |
       mvn test -D suite=parallel.xml
-      
+    displayName: 'Run TestNG tests'
 
   - task: Lambdatest.lambda-azure-pipeline-extention.showResults-task.LambdatestResults@1
-    displayName: "Lambdatest Results"
+    displayName: 'Lambdatest Results'
     env:
-      LT_BUILD_NAME: TestNG With Java
+      LT_BUILD_NAME: 'TestNG With Java'
