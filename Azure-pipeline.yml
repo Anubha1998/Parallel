@@ -1,0 +1,18 @@
+steps:
+  - task: Lambdatest.lambda-azure-pipeline-extention.configuration-task.configuration@1
+    displayName: LambdaTest configuration setup
+    inputs:
+      connection: Extent
+
+    env:
+      LT_BUILD_NAME: Extent Report Parallel-6
+
+  - script: |
+      mvn test -D suite=parallel.xml
+      
+      displayName: "Command Line Script"
+
+  - task: Lambdatest.lambda-azure-pipeline-extention.showResults-task.LambdatestResults@1
+    displayName: "Lambdatest Results"
+    env:
+      LT_BUILD_NAME: Extent Report Parallel-6
