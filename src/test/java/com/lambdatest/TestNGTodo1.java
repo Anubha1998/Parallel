@@ -21,15 +21,16 @@ public class TestNGTodo1 {
     @BeforeMethod
     @org.testng.annotations.Parameters(value = {"browser", "version", "platform"})
     public void TestNGTod1(String browser, String version, String platform,Method method) throws MalformedURLException {
-        String username = System.getenv("LT_USERNAME") == null ? "Your LT Username" : System.getenv("LT_USERNAME");
-        String authkey = System.getenv("LT_ACCESS_KEY") == null ? "Your LT AccessKey" : System.getenv("LT_ACCESS_KEY");
+        String build = System.getenv("LT_BUILD_NAME") == null ? "TestNG With Java" : System.getenv("LT_BUILD_NAME");
+        String userName = "anubhas";
+        String accessKey = "JvGShZ2Bm8RdgmGFbbx4ZtbOb6DeQ8nqSvtHDZdDY7PzqaZMTq";
         String hub = "@hub.lambdatest.com/wd/hub";
 
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("browserName", browser);
         caps.setCapability("browserVersion",version);
         caps.setCapability("platform", platform);
-        caps.setCapability("build", "TestNG With Java");
+        caps.setCapability("build", build);
         caps.setCapability("name", method.getName() + " - " + this.getClass().getName());
         caps.setCapability("plugin", "git-testng");
 
